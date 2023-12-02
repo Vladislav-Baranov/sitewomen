@@ -7,8 +7,11 @@ from django.template.loader import render_to_string
 
 
 def index(request):
-    s = render_to_string('index.html')
-    return HttpResponse(s)
+    return render(request, 'women/index.html')
+
+
+def about(request):
+    return render(request, 'women/about.html')
 
 
 def categories(request):
