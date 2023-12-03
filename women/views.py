@@ -7,11 +7,13 @@ from django.template.loader import render_to_string
 
 
 def index(request):
-    return render(request, 'women/index.html')
+    data = {'title': "Главная страница приложения women"}
+    return render(request, 'women/index.html', context=data)
 
 
 def about(request):
-    return render(request, 'women/about.html')
+    return render(request, 'women/about.html',
+                  context={'title': "О сайте", 'info': "Данный сайт содержит информацию о женщинах"})
 
 
 def categories(request):
