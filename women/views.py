@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 
 
 def index(request):
-    data = {'title': "Главная страница приложения women"}
+    data = {'title': "Главная страница приложения women", 'float': 34.56}
     return render(request, 'women/index.html', context=data)
 
 
