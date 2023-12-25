@@ -2,17 +2,39 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
-    <p>{{ float|add: "50" }}</p>
-    <p>{{ cl.a }}</p>
-    <ul> Список доступных категорий
-        <li> Архив по годам </li>
-        <li> Категории по id </li>
-        <li> Категории по slug </li>
-        <li> Женщины </li>
-    </ul>
+    <title>{{ title|default:"Главная страница women"}}</title>
+    <style>
+        #navbar {
+        margin: 0;
+        padding: 0;
+        list-style-type: #upper-roman;
+        width: 100px;
+      }
+        #navbar li {
+        border-left: 10px solid #666;
+        border-bottom: 1px solid #666;
+      }
+      #navbar a {
+        background-color: #F28220;
+        color: #100F0F;
+        padding: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        border-left: 5px solid #F2FA08;
+        display: block;
+      }
+    </style>
 </head>
 <body>
-
+{% for i in menu %}
+    <p>{{ i }}</p>
+    <hr>
+{% endfor %}
+    <ul id="navbar"> Список доступных категорий
+        <li><a href="#"> Архив по годам</a></li>
+        <li><a href="#"> Категории по id</a></li>
+        <li><a href="#"> Категории по slug</a></li>
+        <li><a href="#"> Женщины</a></li>
+    </ul>
 </body>
 </html>

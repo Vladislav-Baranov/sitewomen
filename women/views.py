@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
+from django.template.defaultfilters import cut
 from django.urls import reverse
 from django.template.loader import render_to_string
 # Create your views here.
 
 
 def index(request):
-    data = {'title': "Главная страница приложения women", 'float': 34.56}
+    data = {'title': "Главная страница приложения women", 'float': 34.56,
+            'menu': ["На главную", "Войти", "Обратная связь", "О нас"]}
     return render(request, 'women/index.html', context=data)
-
 
 def about(request):
     return render(request, 'women/about.html',
@@ -36,10 +37,7 @@ def head(request):
 def archive(request, year):
     if 1980 <= year <= 2023:
         return HttpResponse(f"Показан архив за {year} год")
-    else:
-        uri = reverse('cats/')
-        return redirect(categories)
-
+    return redirect(categories)
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("Страница не найдена")
