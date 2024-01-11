@@ -17,7 +17,7 @@ def index(request):
 
 
 def about(request):
-    return render(request, 'women/about.html',
+    return render(request, 'base.html',
                   context={'title': "О сайте", 'info': "Данный сайт содержит информацию о женщинах"})
 
 
