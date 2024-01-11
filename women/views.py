@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
+from .models import Women
 from django.template.defaultfilters import cut
 from django.urls import reverse
 from django.template.loader import render_to_string
@@ -9,8 +10,11 @@ from django.template.loader import render_to_string
 
 def index(request):
     data = {'title': "Главная страница приложения women", 'float': 34.56,
-            'menu': ["На главную", "Войти", "Обратная связь", "О нас"]}
+            'menu': ["На главную", "Войти", "Обратная связь", "О нас"],
+            'db': Women.objects.all()
+            }
     return render(request, 'women/index.html', context=data)
+
 
 def about(request):
     return render(request, 'women/about.html',
@@ -38,6 +42,11 @@ def archive(request, year):
     if 1980 <= year <= 2023:
         return HttpResponse(f"Показан архив за {year} год")
     return redirect(categories)
+
+
+def show_post(request, post_id):
+    return HttpResponse(f"Показан пост номер {post_id}")
+
 
 def page_not_found(request, exception):
     return HttpResponseNotFound("Страница не найдена")

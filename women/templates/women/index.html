@@ -26,12 +26,18 @@
     </style>
 </head>
 <body>
-{% for i in menu %}
-    <p>{{ i }}</p>
-    <hr>
+{% for w in db %}
+    {% if w.is_publ %}
+        <h2>{{ w.name }}</h2>
+        <p>{{ w.info }}</p>
+        <p><a href = "{%url 'post' w.pk %}"> Читать пост</a></p>
+    {% endif %}
+    {% if not forloop.last%}
+        <hr>
+    {% endif %}
 {% endfor %}
     <ul id="navbar"> Список доступных категорий
-        <li><a href="#"> Архив по годам</a></li>
+        <li><a href="http://127.0.0.1:8000/archive/2023"> Архив по годам</a></li>
         <li><a href="#"> Категории по id</a></li>
         <li><a href="#"> Категории по slug</a></li>
         <li><a href="#"> Женщины</a></li>

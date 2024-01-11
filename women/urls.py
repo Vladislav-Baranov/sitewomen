@@ -12,5 +12,6 @@ urlpatterns = [
     path('cats/<int:cat_id>/', views.categories_byint, name='cats_int'),
     path('cats/<slug:cat_slug>/', views.categories_byslug, name='cats_slug'),
     path('', views.head, name='head'),
-    path('archive/<year4:year>', views.archive, name='arch')
+    path('archive/<year4:year>', views.archive, name='arch'),
+    path('women/post/<int:post_id>/', views.show_post, name='post')
 ]
