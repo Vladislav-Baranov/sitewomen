@@ -1,38 +1,68 @@
+
 <!DOCTYPE html>
-<html lang="ru">
+{% load static %}
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>{{ title|default:"Главная страница women"}}</title>
-    <style>
-        #navbar {
-        margin: 0;
-        padding: 0;
-        list-style-type: #upper-roman;
-        width: 100px;
-      }
-        #navbar li {
-        border-left: 10px solid #666;
-        border-bottom: 1px solid #666;
-      }
-      #navbar a {
-        background-color: #F28220;
-        color: #100F0F;
-        padding: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        border-left: 5px solid #F2FA08;
-        display: block;
-      }
-    </style>
+	<title>{{title}}</title>
+	<link type="text/css" href="{% static 'women/css/styles.css' %}" rel="stylesheet" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="shortcut icon" href="{% static 'women/images/main.ico' %}" type="image/x-icon"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<ul id="navbar">
-        <li><a href="http://127.0.0.1:8000/"> Главная </a></li>
-        <li><a href="http://127.0.0.1:8000/about"> О сайте </a></li>
-        <li><a href="#"> Добавить статью </a></li>
-        <li><a href="#"> Обратная связь </a></li>
-        <li><a href="#"> Войти </a></li>
-    </ul>
-{% block content %} {% endblock %}
+<table class="table-page" border=0 cellpadding="0" cellspacing="0">
+<tr><td valign=top>
+{% block mainmenu %}
+		<div class="header">
+			<ul id="mainmenu" class="mainmenu">
+			<li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
+{% for m in menu %}
+	{% if not forloop.last %}<li>{% else %}<li class="last">{% endif %}
+		<a href="{% url m.url_name %}">{{m.title}}</a></li>
+{% endfor %}
+			</ul>
+			<div class="clear"></div>
+		</div>
+{% endblock mainmenu %}
+
+
+<table class="table-content" border=0 cellpadding="0" cellspacing="0">
+<tr>
+<!-- Sidebar слева -->
+	<td valign="top" class="left-chapters">
+	<ul id="leftchapters">
+		<li class="selected">Все категории</li>
+		<li><a href="#">Актрисы</a></li>
+		<li><a href="#">Певицы</a></li>
+		<li><a href="#">Спортсменки</a></li>
+		<li class="share">
+		<p>Мои контакты</p>
+		<a class="share-yt" href="https://www.youtube.com/channel/UClJzWfGWuGJL2t-3dYKcHTA/playlists" target="_blank" rel="nofollow"></a>
+		<a class="github" href="https://github.com/Vladislav-Baranov"></a>
+		</li>
+	</ul>
+</td>
+<!-- Конец Sidebar'а -->
+<td valign="top" class="content">
+	<!-- Хлебные крошки -->
+	{% block breadcrumbs %}
+	{% endblock %}
+
+<!-- Блок контента -->
+	<div class="content-text">
+{% block content %}
+{% endblock %}
+	</div>
+<!-- Конец блока контента -->
+
+</td></tr></table>
+</td></tr>
+<!-- Footer -->
+<tr><td valign=top>
+	<div id="footer">
+		<p>&copy; 2023 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.</p>
+	</div>
+</td></tr></table>
+<!-- Конец footer'а и страницы -->
 </body>
 </html>

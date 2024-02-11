@@ -7,18 +7,26 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 # Create your views here.
 
+menu = [{'title': "О сайте", 'url_name': 'about'},
+        {'title': "Добавить статью", 'url_name': 'add_page'},
+        {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'}
+]
+
+db = Women.objects.filter(is_publ=1)
+
 
 def index(request):
     data = {'title': "Главная страница приложения women", 'float': 34.56,
-            'menu': ["На главную", "Войти", "Обратная связь", "О нас"],
-            'db': Women.objects.all()
+            'menu': menu,
+            'db': db
             }
     return render(request, 'women/index.html', context=data)
 
 
 def about(request):
-    return render(request, 'base.html',
-                  context={'title': "О сайте", 'info': "Данный сайт содержит информацию о женщинах"})
+    return render(request, 'women/about.html',
+                  context={'title': "О сайте", 'menu': menu})
 
 
 def categories(request):
@@ -35,7 +43,19 @@ def categories_byslug(request, cat_slug):
 
 
 def head(request):
-    return HttpResponse("Главная страница")
+    return render(request, 'women/index.html', {'menu': menu})
+
+
+def addpage(request):
+    return render(request, 'women/index.html', {'menu': menu, 'title': 'Добавить страницу'})
+
+
+def contact(request):
+    return render(request, 'women/index.html', {'menu': menu, 'title': 'Список контактов'})
+
+
+def login(request):
+    render(request, 'women/index.html', {'menu': menu, 'title': 'Авторизация'})
 
 
 def archive(request, year):

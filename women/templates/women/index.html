@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'women/includes/nav.html' %}
-{% for w in db %}
-    {% if w.is_publ %}
-        <h2>{{ w.name }}</h2>
-        <p>{{ w.info }}</p>
-        <p><a href = "{%url 'post' w.pk %}"> Читать пост</a></p>
-    {% endif %}
-    {% if not forloop.last%}
-        <hr>
-    {% endif %}
-{% endfor %}
+<ul class="list-articles">
+	{% for w in db %}
+		<li><h2>{{w.name}}</h2>
+    {% autoescape off %}
+	{{w.info|linebreaks|truncatewords:30}}
+    {% endautoescape %}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="{% url 'post' w.id %}">Читать пост</a></p>
+			</li>
+	{% endfor %}
+</ul>
 {% endblock %}
+
