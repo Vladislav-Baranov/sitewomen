@@ -9,3 +9,5 @@ class Women(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_publ = models.BooleanField(default=True)
 # Create your models here.
+
+

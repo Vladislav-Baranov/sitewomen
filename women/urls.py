@@ -12,9 +12,7 @@ urlpatterns = [
     path('addpage/', views.addpage, name='add_page'),
     path('contact/', views.contact, name='contact'),
     path('login/', views.login, name='login'),
-    path('cats/<int:cat_id>/', views.categories_byint, name='cats_int'),
-    path('cats/<slug:cat_slug>/', views.categories_byslug, name='cats_slug'),
+    path('cats/<int:cat_id>/', views.show_category, name='category'),
     path('', views.head, name='home'),
-    path('archive/<year4:year>', views.archive, name='arch'),
     path('post/<int:post_id>/', views.show_post, name='post')
 ]

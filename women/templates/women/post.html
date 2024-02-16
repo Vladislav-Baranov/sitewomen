@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for w in db %}
+{% if w.id == post_id %}
+<h2>{{w.name}}</h2>
+<p>{{w.info}}</p>
+{% endif %}
+{% endfor %}
+{% endblock %}

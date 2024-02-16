@@ -13,13 +13,19 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Войти", 'url_name': 'login'}
 ]
 
+cats_db = [
+    {'id': 1, 'name': 'Актриссы'},
+    {'id': 2, 'name': 'Певицы'},
+    {'id': 3, 'name': 'Спортсменки'}
+]
 db = Women.objects.filter(is_publ=1)
 
 
 def index(request):
     data = {'title': "Главная страница приложения women", 'float': 34.56,
             'menu': menu,
-            'db': db
+            'db': db,
+            'cat_selected': 0,
             }
     return render(request, 'women/index.html', context=data)
 
@@ -33,13 +39,13 @@ def categories(request):
     return HttpResponse("<h1>Главная страница приложения categories</h1>")
 
 
-def categories_byint(request, cat_id):
-    return HttpResponse(f"<h1>Страница приложения categories</h1><p>id = {cat_id}")
-
-
-def categories_byslug(request, cat_slug):
-    print(request.GET)
-    return HttpResponse(f"<h1>Страница приложения categories</h1><p>id = {cat_slug}")
+def show_category(request, cat_id):
+    data = {'title': "Главная страница приложения women", 'float': 34.56,
+            'menu': menu,
+            'db': db,
+            'cat_selected': cat_id,
+            }
+    return render(request, 'women/index.html', context=data)
 
 
 def head(request):
@@ -55,17 +61,11 @@ def contact(request):
 
 
 def login(request):
-    render(request, 'women/index.html', {'menu': menu, 'title': 'Авторизация'})
-
-
-def archive(request, year):
-    if 1980 <= year <= 2023:
-        return HttpResponse(f"Показан архив за {year} год")
-    return redirect(categories)
+    return render(request, 'women/index.html', {'menu': menu, 'title': 'Авторизация'})
 
 
 def show_post(request, post_id):
-    return HttpResponse(f"Показан пост номер {post_id}")
+    return render(request, 'women/post.html', {'menu': menu, 'db': db, 'title': f'Пост {post_id}', 'post_id': post_id})
 
 
 def page_not_found(request, exception):
