@@ -3,12 +3,16 @@
 {% block content %}
 <ul class="list-articles">
 	{% for w in db %}
+	<li><div class="article-panel">
+         <p class="first">Категория: {{w.cat.name}}</p>
+         <p class="last">Дата: {{w.time_update|date:"d-m-Y H:i:s"}}</p>
+</div>
 		<li><h2>{{w.name}}</h2>
     {% autoescape off %}
 	{{w.info|linebreaks|truncatewords:30}}
     {% endautoescape %}
 			<div class="clear"></div>
-			<p class="link-read-post"><a href="{% url 'post' w.id %}">Читать пост</a></p>
+			<p class="link-read-post"><a href="{{w.get_absolute_url}}">Читать пост</a></p>
 			</li>
 	{% endfor %}
 </ul>

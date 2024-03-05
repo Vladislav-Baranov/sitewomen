@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-{% for w in db %}
-{% if w.id == post_id %}
-<h2>{{w.name}}</h2>
-<p>{{w.info}}</p>
+<h1>{{posts.name}}</h1>
+{% if posts.photo %}
+<p><img class="img-article-left" scr="{{post.photo.url}}"></p>
 {% endif %}
-{% endfor %}
+{{posts.info|linebreaks}}
 {% endblock %}

@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
-from .models import Women
+from .models import Women, Categories
 from django.template.defaultfilters import cut
 from django.urls import reverse
 from django.template.loader import render_to_string
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
@@ -18,14 +19,14 @@ cats_db = [
     {'id': 2, 'name': 'Певицы'},
     {'id': 3, 'name': 'Спортсменки'}
 ]
-db = Women.objects.filter(is_publ=1)
+db = Women.public.all()
 
 
 def index(request):
-    data = {'title': "Главная страница приложения women", 'float': 34.56,
+    data = {'title': "Главная страница приложения women",
             'menu': menu,
-            'db': db,
-            'cat_selected': 0,
+            'post': db,
+            'cat_selected': 1,
             }
     return render(request, 'women/index.html', context=data)
 
@@ -39,11 +40,13 @@ def categories(request):
     return HttpResponse("<h1>Главная страница приложения categories</h1>")
 
 
-def show_category(request, cat_id):
-    data = {'title': "Главная страница приложения women", 'float': 34.56,
+def show_category(request, cat_slug):
+    category = get_object_or_404(Categories, slug=cat_slug)
+    posts = Women.objects.filter(is_publ=1, cat_id=category.pk)
+    data = {'title': f"Рубрика: {category}",
             'menu': menu,
-            'db': db,
-            'cat_selected': cat_id,
+            'db': posts,
+            'cat_selected': category.pk
             }
     return render(request, 'women/index.html', context=data)
 
@@ -64,8 +67,14 @@ def login(request):
     return render(request, 'women/index.html', {'menu': menu, 'title': 'Авторизация'})
 
 
-def show_post(request, post_id):
-    return render(request, 'women/post.html', {'menu': menu, 'db': db, 'title': f'Пост {post_id}', 'post_id': post_id})
+def show_post(request, post_slug):
+    posts = get_object_or_404(Women, slug=post_slug)
+    data = {'title': posts.name,
+            'menu': menu,
+            'posts': posts,
+            'cat_selected': 1,
+            }
+    return render(request, 'women/post.html', data)
 
 
 def page_not_found(request, exception):
