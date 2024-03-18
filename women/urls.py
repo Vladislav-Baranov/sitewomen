@@ -1,5 +1,5 @@
 
-from django.urls import path, re_path, register_converter
+from django.urls import path, re_path, register_converter, include
 from . import views
 from . import converters
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('cats/<slug:cat_slug>/', views.show_category, name='category'),
     path('', views.head, name='home'),
-    path('post/<slug:post_slug>/', views.show_post, name='post')
+    path('post/<slug:post_slug>/', views.show_post, name='post'),
+    path('tag/<slug:tag_slug>/', views.show_tag, name='tag'),
 ]

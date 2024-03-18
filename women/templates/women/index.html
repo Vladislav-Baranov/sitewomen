@@ -2,7 +2,7 @@
 
 {% block content %}
 <ul class="list-articles">
-	{% for w in db %}
+	{% for w in posts %}
 	<li><div class="article-panel">
          <p class="first">Категория: {{w.cat.name}}</p>
          <p class="last">Дата: {{w.time_update|date:"d-m-Y H:i:s"}}</p>

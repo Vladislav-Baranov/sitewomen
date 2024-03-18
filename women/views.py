@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
-from .models import Women, Categories
+from .models import Women, Categories, TagPosts
 from django.template.defaultfilters import cut
 from django.urls import reverse
 from django.template.loader import render_to_string
@@ -14,19 +14,15 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Войти", 'url_name': 'login'}
 ]
 
-cats_db = [
-    {'id': 1, 'name': 'Актриссы'},
-    {'id': 2, 'name': 'Певицы'},
-    {'id': 3, 'name': 'Спортсменки'}
-]
-db = Women.public.all()
+
+db = Women.public.all().select_related('cat')
 
 
 def index(request):
     data = {'title': "Главная страница приложения women",
             'menu': menu,
-            'post': db,
-            'cat_selected': 1,
+            'posts': db,
+            'cat_selected': 0,
             }
     return render(request, 'women/index.html', context=data)
 
@@ -42,10 +38,10 @@ def categories(request):
 
 def show_category(request, cat_slug):
     category = get_object_or_404(Categories, slug=cat_slug)
-    posts = Women.objects.filter(is_publ=1, cat_id=category.pk)
+    posts = Women.objects.filter(is_publ=1, cat_id=category.pk).select_related('cat')
     data = {'title': f"Рубрика: {category}",
             'menu': menu,
-            'db': posts,
+            'posts': posts,
             'cat_selected': category.pk
             }
     return render(request, 'women/index.html', context=data)
@@ -75,6 +71,17 @@ def show_post(request, post_slug):
             'cat_selected': 1,
             }
     return render(request, 'women/post.html', data)
+
+
+def show_tag(request, tag_slug):
+    tag = get_object_or_404(TagPosts, slug=tag_slug)
+    posts = tag.tags.filter(is_publ=Women.Status.PUBLISHED).select_related('cat')
+    data = {'title': f'Тэг: {tag.tag}',
+            'menu': menu,
+            'posts': posts,
+            'cat_selected': None,
+            }
+    return render(request, 'women/index.html', context=data)
 
 
 def page_not_found(request, exception):
