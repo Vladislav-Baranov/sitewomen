@@ -6,6 +6,7 @@ from django.template.defaultfilters import cut
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
+from .forms import AddPostForm
 # Create your views here.
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
@@ -52,7 +53,20 @@ def head(request):
 
 
 def addpage(request):
-    return render(request, 'women/index.html', {'menu': menu, 'title': 'Добавить страницу'})
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = AddPostForm()
+
+    data = {
+        'menu': menu,
+        'title': 'Добавить пост',
+        'form': form
+    }
+
+    return render(request, 'women/addpage.html', context=data)
 
 
 def contact(request):

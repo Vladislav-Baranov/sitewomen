@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.template.defaultfilters import slugify
 
 
 class PublishedManager(models.Manager):
@@ -11,17 +12,18 @@ class Women(models.Model):
     class Status(models.IntegerChoices):
         DRAFT = 0, 'Черновик'
         PUBLISHED = 1, 'Опубликовано'
+        MODERATION = 2, 'На модерации'
 
-    name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40, verbose_name='Имя')
     age = models.IntegerField()
-    info = models.TextField()
+    info = models.TextField(verbose_name='Текст статьи')
     slug = models.SlugField(max_length=255, unique=True, db_index=True, default='')
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
-    is_publ = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
-    cat = models.ForeignKey('Categories', on_delete=models.CASCADE, related_name='post')
-    tags = models.ManyToManyField('TagPosts', blank=True, related_name='tags')
-    nation = models.OneToOneField('Nationality', on_delete=models.CASCADE, null=True, related_name='nation')
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    time_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+    is_publ = models.IntegerField(choices=Status.choices,
+                                  default=Status.DRAFT, verbose_name='Статус публикации')
+    cat = models.ForeignKey('Categories', on_delete=models.CASCADE, related_name='post', verbose_name='Категория')
+    tags = models.ManyToManyField('TagPosts', blank=True, related_name='tags', verbose_name='Тэги')
     objects = models.Manager()
     public = PublishedManager()
 
@@ -42,8 +44,12 @@ class Women(models.Model):
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=40, db_index=True)
+    name = models.CharField(max_length=40, db_index=True, verbose_name='Название категории')
     slug = models.SlugField(max_length=50, db_index=True)
+
+    class Meta:
+        verbose_name = 'Категории'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
@@ -63,10 +69,3 @@ class TagPosts(models.Model):
         return reverse('tag', kwargs={'tag_slug': self.slug})
 
 
-class Nationality(models.Model):
-    name = models.CharField(max_length=100, db_index=True)
-    birth_place = models.TextField()
-    child = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return f"Национальность: {self.name}. Место рождения: {self.birth_place}"
