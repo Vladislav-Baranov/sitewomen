@@ -54,9 +54,23 @@ def head(request):
 
 def addpage(request):
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
+         form = AddPostForm(request.POST)
+         if form.is_valid():
+    #         # print(form.cleaned_data)
+    #         try:
+    #             if 'tags' in form.cleaned_data.keys():
+    #                 t = form.cleaned_data['tags']
+    #                 form.cleaned_data.pop('tags', None)
+    #                 w = Women.objects.create(**form.cleaned_data)
+    #                 w.tags.set(t)
+    #             else:
+    #                 Women.objects.create(**form.cleaned_data)
+    #             return redirect('home')
+    #
+    #         except:
+    #             form.add_error(None, 'Ошибка добавления поста')
+            form.save()
+            return redirect('home')
     else:
         form = AddPostForm()
 

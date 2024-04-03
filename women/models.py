@@ -21,7 +21,7 @@ class Women(models.Model):
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     time_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     is_publ = models.IntegerField(choices=Status.choices,
-                                  default=Status.DRAFT, verbose_name='Статус публикации')
+                                  default=Status.DRAFT, verbose_name='Статус')
     cat = models.ForeignKey('Categories', on_delete=models.CASCADE, related_name='post', verbose_name='Категория')
     tags = models.ManyToManyField('TagPosts', blank=True, related_name='tags', verbose_name='Тэги')
     objects = models.Manager()

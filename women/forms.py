@@ -1,14 +1,29 @@
 from django import forms
-from .models import Categories, Women
+from django.core.exceptions import ValidationError
 
-IS_PUBLISHED_FORM = ([0, 'Черновик'],
- [1, 'Опубликовано'],
- [2, 'На модерации'], )
+from .models import Categories, Women, TagPosts
+from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.utils.deconstruct import deconstructible
 
 
-class AddPostForm(forms.Form):
-    title = forms.CharField(max_length=100, label='Заголовок')
-    slug = forms.SlugField(max_length=100)
-    content = forms.CharField(widget=forms.Textarea())
-    is_publ = forms.IntegerField(widget=forms.Select(choices=IS_PUBLISHED_FORM))
-    cat = forms.ModelChoiceField(queryset=Categories.objects.all())
+class AddPostForm(forms.ModelForm):
+
+    cat = forms.ModelChoiceField(queryset=Categories.objects.all(), label='Категория', empty_label='Не выбрана')
+    tags = forms.ModelMultipleChoiceField(queryset=TagPosts.objects.all(), label='Тэги',
+                                          widget=forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}))
+
+    class Meta:
+        model = Women
+        fields = ['name', 'age', 'slug', 'info', 'is_publ', 'cat', 'tags']
+        labels = {'slug': 'URL'}
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-input'}),
+            'content': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+        }
+
+    def clean_info(self):
+        info = self.cleaned_data['info']
+        ALLOWED_CHARS = '''АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщбыъэюя0123456789()-,:!?—"«»'.- '''
+        if not (set(info) <= set(ALLOWED_CHARS)):
+            raise ValidationError("Должны быть только русские символы, дефис и пробел.")
+        return info
