@@ -1,44 +1,35 @@
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
+
 from .models import Women, Categories
 from django.db.models.functions import Length
 # Register your models here.
 admin.site.site_header = 'Админ панель'
 admin.site.index_title = 'Известные женщины'
 
-class MarriedStatus(admin.SimpleListFilter):
-    title = 'Семейное положение'
-    parameter_name = 'status'
-
-    def lookups(self, request, model_admin):
-        return [
-            ('married', 'Замужем'),
-            ('single', 'Не замужем')
-        ]
-
-    def queryset(self, request, queryset):
-        if self.value() == 'married':
-            return queryset.filter(nation__is_married=1)
-        elif self.value() == 'single':
-            return queryset.filter(nation__is_married=0)
-
 
 @admin.register(Women)
 class WomenAdmin(admin.ModelAdmin):
-    fields = ['name', 'age', 'info', 'slug', 'cat', 'tags', 'is_publ']
-    #readonly_fields = ['slug']
+    fields = ['name', 'age', 'info', 'slug', 'cat', 'tags', 'is_publ', 'img', 'post_photo']
+    readonly_fields = ['post_photo']
     prepopulated_fields = {'slug': ('name', )}
     filter_horizontal = ['tags']
-    list_display = ('name', 'time_create', 'is_publ', 'cat', 'brief_info')
+    list_display = ('name', 'time_create', 'is_publ', 'cat', 'post_photo')
     list_display_links = ('name', )
     list_editable = ('is_publ', )
     list_per_page = 10
     actions = ['set_published', 'set_draft', 'set_moderation']
     search_fields = ['name', 'cat__name']
-    list_filter = [MarriedStatus, 'is_publ']
+    list_filter = ['is_publ']
+    save_on_top = True
 
-    @admin.display(description='Информация о публикации', ordering=Length("info"))
-    def brief_info(self, women: Women):
-        return f"Размер публикации {len(women.info)} символов"
+    @admin.display(description='Фото')
+    def post_photo(self, women: Women):
+        if women.img:
+            return mark_safe(f"<img src='{women.img.url}' alt='' width=100 high=100>")
+        else:
+            return "Без фото"
+
 
     @admin.action(description='Опубликовать записи')
     def set_published(self, request, queryset):

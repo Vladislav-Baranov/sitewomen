@@ -24,6 +24,7 @@ class Women(models.Model):
                                   default=Status.DRAFT, verbose_name='Статус')
     cat = models.ForeignKey('Categories', on_delete=models.CASCADE, related_name='post', verbose_name='Категория')
     tags = models.ManyToManyField('TagPosts', blank=True, related_name='tags', verbose_name='Тэги')
+    img = models.ImageField(upload_to='photos/%Y/%m/%d', default=None, blank=True, null=True, verbose_name='Изображение')
     objects = models.Manager()
     public = PublishedManager()
 

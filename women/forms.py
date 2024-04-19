@@ -14,16 +14,16 @@ class AddPostForm(forms.ModelForm):
 
     class Meta:
         model = Women
-        fields = ['name', 'age', 'slug', 'info', 'is_publ', 'cat', 'tags']
+        fields = ['name', 'age', 'slug', 'info', 'is_publ', 'cat', 'tags', 'img']
         labels = {'slug': 'URL'}
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
         }
 
-    def clean_info(self):
-        info = self.cleaned_data['info']
-        ALLOWED_CHARS = '''АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщбыъэюя0123456789()-,:!?—"«»'.- '''
-        if not (set(info) <= set(ALLOWED_CHARS)):
-            raise ValidationError("Должны быть только русские символы, дефис и пробел.")
-        return info
+    # def clean_info(self):
+    #     info = self.cleaned_data['info']
+    #     ALLOWED_CHARS = '''АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщбыъэюя0123456789()-,:!?—"«»'.- '''
+    #     if not (set(info) <= set(ALLOWED_CHARS)):
+    #         raise ValidationError("Должны быть только русские символы, дефис и пробел.")
+    #     return info

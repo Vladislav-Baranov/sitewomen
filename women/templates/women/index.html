@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+	p.success_message{
+		background: #8CFF94;
+		width: 1000px;
+  		height: 50px;
+	}
+</style>
+
+{% if messages %}
+<ul class="message">
+    {% for message in messages %}
+	<p class="success_message">{% if message.tags %} {{ message.tags }} {% endif %}</p>
+    {% endfor %}
+</ul>
+{% endif %}
 <ul class="list-articles">
-	{% for w in posts %}
+	{% for post in posts %}
 	<li><div class="article-panel">
-         <p class="first">Категория: {{w.cat.name}}</p>
-         <p class="last">Дата: {{w.time_update|date:"d-m-Y H:i:s"}}</p>
+         <p class="first">Категория: {{post.cat.name}}</p>
+         <p class="last">Дата: {{post.time_update|date:"d-m-Y H:i:s"}}</p>
 </div>
-		<li><h2>{{w.name}}</h2>
+		<li><h2>{{post.name}}</h2>
+	{% if post.img %}
+<p><img class="img-article-left thumb" alt="" src="{{post.img.url}}" width=170 high="170"></p>
+	{% endif %}
     {% autoescape off %}
-	{{w.info|linebreaks|truncatewords:30}}
+	{{post.info|linebreaks|truncatewords:30}}
     {% endautoescape %}
 			<div class="clear"></div>
-			<p class="link-read-post"><a href="{{w.get_absolute_url}}">Читать пост</a></p>
+			<p class="link-read-post"><a href="{{post.get_absolute_url}}">Читать пост</a></p>
 			</li>
 	{% endfor %}
 </ul>
