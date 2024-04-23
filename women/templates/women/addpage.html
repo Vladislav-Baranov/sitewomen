@@ -9,6 +9,9 @@
 <label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
 <div class="form-error">{{ f.errors }}</div>
 {% endfor %}
-    <p><button type="submit">Добавить пост</button></p>
+    {% if del %}
+     <p>Are you sure you want to delete "{{ object }}"?</p>
+    {% endif %}
+    <p><button type="submit">{{button_name}}</button></p>
 </form>
 {% endblock %}
