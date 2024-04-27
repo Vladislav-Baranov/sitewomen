@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
@@ -42,7 +42,7 @@ def contact(request):
 
 
 def login(request):
-    return redirect('women')
+    return redirect('http://127.0.0.1:8000/users/login')
 
 
 def about(request):

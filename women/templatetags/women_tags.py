@@ -2,6 +2,7 @@ from django import template
 import women.views as views
 from women.models import Categories, TagPosts
 from django.db.models import Count
+from sitewomen.utils import menu
 
 register = template.Library()
 
